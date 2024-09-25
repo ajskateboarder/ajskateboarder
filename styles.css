@@ -1,0 +1,107 @@
+html {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body.login {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+body.login main {
+    display: flex;
+    justify-content: center;
+}
+
+.login-panel {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.login-area {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.login-area input {
+    padding: 0.5em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid grey;
+}
+
+.user-list {
+    padding: 0;
+    display: inline;
+}
+
+.user-list li {
+    display: inline;
+}
+
+.navbar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.posts {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.top-level-stuff {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin: -10px;
+}
+
+.post {
+    background-color: rgba(100, 100, 100, 0.1);
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 9px;
+    padding-bottom: 0px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.post-header img {
+    border-radius: 50%;
+}
+
+.post-box-wrapper {
+    display: flex;
+}
+
+.post-box-wrapper button {
+    width: 70px;
+}
+
+.post-box {
+    width: 100%;
+    border-radius: 5px;
+    height: 40px;
+    border: 1px solid grey;
+}
