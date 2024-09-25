@@ -7,6 +7,7 @@ const Login = () => {
   const username = input({ type: "text", placeholder: "Username" });
   const password = input({ type: "password", placeholder: "Password" });
   const error = span({ style: "margin-top: 5px" }, "");
+  let lurking = false;
 
   const login = button(
     {
@@ -28,6 +29,13 @@ const Login = () => {
         }
         localStorage.setItem("ajs:user", username.value);
         localStorage.setItem("ajs:token", json.token);
+        const urlParams = new URLSearchParams(window.location.search);
+        if (lurking) {
+          urlParams.set("lurking", "yes");
+        } else {
+          urlParams.delete("lurking");
+        }
+        window.location.search = urlParams;
         await chat();
       },
     },
@@ -49,7 +57,14 @@ const Login = () => {
       div({ class: "field", style: "margin-top: 10px" }, password)
     ),
     login,
-    error
+    error,
+    span(
+      input({
+        type: "checkbox",
+        onchange: (e) => (lurking = e.target.checked),
+      }),
+      span("lurk mode")
+    )
   );
 };
 

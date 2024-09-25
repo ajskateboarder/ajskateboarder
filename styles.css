@@ -1,6 +1,6 @@
 html {
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Inter, Noto Color Emoji, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 *,
@@ -43,6 +43,11 @@ body.login main {
     border: 1px solid grey;
 }
 
+.ulist {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .user-list {
     padding: 0;
     display: inline;
@@ -78,6 +83,8 @@ body.login main {
     margin-top: 10px;
     padding: 9px;
     padding-bottom: 0px;
+    display: flex;
+    gap: 20px
 }
 
 .post-header {
@@ -85,23 +92,32 @@ body.login main {
     align-items: center;
     gap: 10px;
     font-size: 15px;
+    justify-content: space-between;
 }
 
-.post-header img {
+.avatar {
     border-radius: 50%;
+    aspect-ratio: 1;
+    image-rendering: optimizeQuality;
 }
 
 .post-box-wrapper {
     display: flex;
+    align-items: center;
 }
 
 .post-box-wrapper button {
     width: 70px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid grey;
 }
 
 .post-box {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 0px;
     height: 40px;
     border: 1px solid grey;
+    resize: none;
+    font-family: Arial, Helvetica, sans-serif;
 }
