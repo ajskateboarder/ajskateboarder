@@ -128,9 +128,17 @@ body.login main {
     opacity: 0.5;
 }
 
-.preview {
+img.preview {
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: 90vh;
+    max-height: 10rem;
+}
+
+video.preview,
+audio.preview {
+    height: auto;
+    max-height: 10rem;
+    position: relative;
+    z-index: -1;
 }

@@ -15,8 +15,12 @@ const {
   p,
   br,
   img,
+  video,
   input,
   small,
+  audio,
+  source,
+  a,
 } = van.tags;
 
 const usersTyping = {};
@@ -158,12 +162,38 @@ const Post = (data) => {
   if (data.attachments.length !== 0) {
     attachments = div(
       { class: "attachments" },
-      ...data.attachments.map((e) =>
-        img({
-          src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
-          class: "preview",
-        })
-      )
+      ...data.attachments.map((e) => {
+        console.log(e);
+        if (e.mime === "video/mp4") {
+          return video({
+            src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
+            controls: true,
+            class: "preview",
+          });
+        } else if (e.mime.startsWith("image/")) {
+          return img({
+            src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
+            class: "preview",
+          });
+        } else if (e.mime.startsWith("audio/")) {
+          return audio(
+            {
+              controls: true,
+            },
+            source({
+              src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
+              type: e.mime,
+            })
+          );
+        } else {
+          return a(
+            {
+              href: ``,
+            },
+            `Download ${e.filename} (${byteFormatter(e.size)})`
+          );
+        }
+      })
     );
   }
 
