@@ -1,4 +1,4 @@
-import { van, sidebar, contents } from "./index.js";
+import { van, sidebar, contents, md } from "./index.js";
 import login from "./login.js";
 
 const {
@@ -16,6 +16,7 @@ const {
   br,
   img,
   input,
+  small,
 } = van.tags;
 
 const usersTyping = {};
@@ -160,7 +161,7 @@ const Post = (data) => {
       ...data.attachments.map((e) =>
         img({
           src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
-          style: "height: 20rem",
+          class: "preview",
         })
       )
     );
@@ -195,7 +196,7 @@ const Post = (data) => {
       { style: "display: flex; flex-direction: column; width: 100%" },
       div(
         { class: "post-header" },
-        span(b(data.u), " ", time),
+        span(b(data.u), " ", time, small({ class: "edit-status" })),
         span(
           { style: "display: flex; gap: 10px" },
           button(
@@ -249,7 +250,6 @@ const Post = (data) => {
                         Token: localStorage.getItem("ajs:token"),
                       },
                     });
-                    document.querySelector(`[id="${data._id}"]`).remove();
                   },
                 },
                 i({ class: "fa-solid fa-trash" })
@@ -258,9 +258,9 @@ const Post = (data) => {
         )
       ),
       replyBox,
-      p({
-        style: "margin-top: 5px",
-        innerHTML: data.p.replaceAll("\n", "<br>"),
+      span({
+        class: "markdown-body",
+        innerHTML: md.render(data.p),
       }),
       attachments
     )
@@ -429,6 +429,23 @@ export default async function () {
         })
       );
     }
+
+    ws.addEventListener("message", (e) => {
+      const data = JSON.parse(e.data);
+      if (data.cmd === "update_post") {
+        const post = document.querySelector(`[id="${data.val._id}"]`);
+        if (post) {
+          post.querySelector(".markdown-body").innerHTML = md.render(
+            data.val.p
+          );
+          post.querySelector(".edit-status").innerHTML = "&nbsp;(edited)";
+        }
+      } else if (data.cmd === "delete_post") {
+        const post = document.querySelector(`[id="${data.val.post_id}"]`);
+        post?.remove();
+      }
+    });
+
     contents.append(
       div(
         { class: "top-level-stuff" },
