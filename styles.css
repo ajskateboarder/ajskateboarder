@@ -1,12 +1,44 @@
 html {
     box-sizing: border-box;
-    font-family: Inter, Noto Color Emoji, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: Inter;
 }
 
 *,
 *:before,
 *:after {
     box-sizing: inherit;
+}
+
+select,
+input {
+    border: 1px solid grey
+}
+
+.action {
+    padding: 5px;
+    border-radius: 50%;
+    border: none;
+    height: 30px;
+    width: 30px;
+}
+
+.regular-button {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(100, 100, 100, 0.1);
+}
+
+button {
+    background-color: rgba(100, 100, 100, 0.1);
+}
+
+button:hover {
+    filter: brightness(0.3);
+}
+
+textarea:hover {
+    filter: brightness(0.2);
 }
 
 body.login {
@@ -19,6 +51,10 @@ body.login {
 body.login main {
     display: flex;
     justify-content: center;
+}
+
+body.chat {
+    overflow-x: hidden;
 }
 
 .login-panel {
@@ -75,6 +111,7 @@ body.login main {
     box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
     padding: 10px;
     margin: -10px;
+    z-index: 999;
 }
 
 .post {
@@ -110,21 +147,23 @@ body.login main {
     width: 70px;
     height: 40px;
     border-radius: 5px;
-    border: 1px solid grey;
+    border: none;
 }
 
 .post-box {
     width: 100%;
     border-radius: 0px;
+    padding-top: 5px;
+    outline: none;
     height: 40px;
-    border: 1px solid grey;
+    border: none;
+    background-color: rgba(100, 100, 100, 0.1);
     resize: none;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .edit-status {
     position: relative;
-    z-index: -1;
     opacity: 0.5;
 }
 
@@ -140,5 +179,63 @@ audio.preview {
     height: auto;
     max-height: 10rem;
     position: relative;
-    z-index: -1;
+}
+
+.file-upload {
+    display: inline-flex;
+    padding: 5px;
+    border-radius: 5px;
+    gap: 10px;
+    background-color: rgba(100, 100, 100, 0.1);
+}
+
+.file-upload a,
+.file-upload a:hover,
+.file-upload a:visited {
+    color: inherit
+}
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: right;
+}
+
+.markdown-body>p {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.online-circle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: green;
+    margin-top: -15px;
+    margin-left: 35px;
+    display: none;
+}
+
+.settings-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: 30px;
+    align-items: center;
+}
+
+.settings {
+    width: 20rem;
+}
+
+.settings p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.edit-button:disabled {
+    opacity: 0.5;
 }

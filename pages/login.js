@@ -1,6 +1,7 @@
 import chat from "./chat.js";
 import { van, sidebar, contents } from "./index.js";
 
+// prettier-ignore
 const { div, input, h2, p, button, i, span } = van.tags;
 
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
 
   const login = button(
     {
+      class: "regular-button",
       style: "margin-top: 10px",
       onclick: async () => {
         error.innerText = "";
