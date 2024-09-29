@@ -552,7 +552,7 @@ const PostBox = (lurking, fileInput, fileList) => {
   const post = textarea({
     class: "post-box",
     placeholder: "Whar's on your mind?",
-    style: "height: 100px; font-size: 13px",
+    style: "font-size: 13px",
     onkeydown: async (e) => {
       if (e.key === "Enter" && !e.shiftKey && !mobile()) {
         e.preventDefault();
