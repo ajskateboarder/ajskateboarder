@@ -32,10 +32,6 @@ html[data-theme="dark"] {
         filter: brightness(0.7);
     }
 
-    textarea:hover {
-        filter: brightness(0.8);
-    }
-
     .online-circle {
         filter: brightness(1.6) grayscale(0.4);
     }

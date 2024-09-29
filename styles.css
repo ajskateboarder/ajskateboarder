@@ -37,10 +37,6 @@ button:hover {
     filter: brightness(0.3);
 }
 
-textarea:hover {
-    filter: brightness(0.2);
-}
-
 body.login {
     display: flex;
     height: 100vh;
@@ -153,7 +149,7 @@ body.chat {
 .post-box {
     width: 100%;
     border-radius: 0px;
-    padding-top: 5px;
+    padding: 5px;
     outline: none;
     height: 40px;
     border: none;
