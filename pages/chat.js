@@ -554,19 +554,9 @@ const PostBox = (lurking, fileInput, fileList) => {
     placeholder: "Whar's on your mind?",
     style: "height: 100px; font-size: 13px",
     onkeydown: async (e) => {
-      post.style.height =
-        post.scrollHeight -
-        parseFloat(getComputedStyle(post).fontSize) * 2 +
-        "px";
-      if (parseInt(post.style.height.replace("px", "")) < 40) {
-        post.style.height = "40px";
-      }
       if (e.key === "Enter" && !e.shiftKey && !mobile()) {
         e.preventDefault();
         send.click();
-        post.style.height = "100px";
-        upload.style.height = "100px";
-        send.style.height = "100px";
       }
       if (!lurking) {
         if (lastTyped + 3000 < Date.now()) {
@@ -579,9 +569,6 @@ const PostBox = (lurking, fileInput, fileList) => {
             },
           });
         }
-      }
-      if (post.value === "") {
-        post.style.height = "auto";
       }
     },
     onpaste: async (e) => {
