@@ -306,7 +306,11 @@ const Post = (data) => {
           style:
             "padding-bottom: 10px; margin-bottom: 0px; display: flex; justify-content: space-between",
         },
-        span(b(`@${data.author._id}`), " ", data.p),
+        span(
+          b(`@${data.author._id}`),
+          " ",
+          data.p.length > 50 ? data.p.slice(0, 30) + "..." : data.p
+        ),
         button(
           {
             class: "action",
@@ -504,7 +508,11 @@ const Post = (data) => {
     touchendX = e.changedTouches[0].screenX;
     touchendY = e.changedTouches[0].screenY;
     if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > 200) {
+      post.classList.add("silly-replying-gesture");
       replyToPost();
+      setTimeout(() => {
+        post.classList.remove("silly-replying-gesture");
+      }, 1000);
     } else if (touchstartY === touchendY) {
       if (!tappedTwice) {
         tappedTwice = true;

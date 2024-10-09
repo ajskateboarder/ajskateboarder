@@ -256,3 +256,21 @@ audio.preview {
 .emoji {
     vertical-align: bottom;
 }
+
+.silly-replying-gesture {
+    animation-duration: 0.3s;
+    animation-name: slidein;
+    animation-iteration-count: 1;
+}
+
+@keyframes slidein {
+    from {
+        translate: 110vw 0;
+        scale: 200% 1;
+    }
+
+    to {
+        translate: 0 0;
+        scale: 100% 1;
+    }
+}
