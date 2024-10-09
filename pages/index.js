@@ -6,6 +6,7 @@ const van = van_;
 
 export const md = markdownIt({
   linkify: true,
+  breaks: true,
 });
 
 /** @type {HTMLElement} */

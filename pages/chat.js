@@ -10,6 +10,7 @@ let replys = [];
 let attachments = [];
 let fileNames = [];
 
+let everySecond = localStorage.getItem("ajs:date-update") ?? false;
 let sortUlist = localStorage.getItem("ajs:sort-ulist") ?? false;
 let theme = localStorage.getItem("ajs:theme") ?? "light";
 
@@ -277,12 +278,15 @@ const Post = (data) => {
     { style: "color: grey", title: new Date(data.t.e * 1000).toString() },
     "• " + timeAgo(data.t.e - 1)
   );
-  setInterval(() => {
-    const newTime = "• " + timeAgo(data.t.e - 1);
-    if (time.innerText !== newTime) {
-      time.innerText = newTime;
-    }
-  }, 5000);
+  setInterval(
+    () => {
+      const newTime = "• " + timeAgo(data.t.e - 1);
+      if (time.innerText !== newTime) {
+        time.innerText = newTime;
+      }
+    },
+    everySecond ? 1000 : 5000
+  );
 
   const avatar = img({
     height: "48",
@@ -324,6 +328,80 @@ const Post = (data) => {
         )
       )
     );
+  };
+
+  const editPost = async (e) => {
+    e.stopImmediatePropagation();
+    const text = document.querySelector(`[id="${data._id}"] .markdown-body`);
+    text.style.display = "none";
+    e.target.disabled = true;
+
+    const submit = button(
+      {
+        style:
+          "border: none; width: 40px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px",
+        onclick: async () => {
+          data.p = editText.value;
+          await fetch(`https://api.meower.org/posts?id=${data._id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Token: localStorage.getItem("ajs:token"),
+            },
+            body: JSON.stringify({
+              content: editText.value,
+            }),
+          });
+          editField.remove();
+          text.style.display = "block";
+          e.target.disabled = false;
+        },
+      },
+
+      i({ class: "fa-solid fa-check" })
+    );
+
+    const cancel = button(
+      {
+        style: "border: none; width: 40px; height: 40px",
+        onclick: async () => {
+          editField.remove();
+          text.style.display = "block";
+          e.target.disabled = false;
+        },
+      },
+
+      i({ class: "fa-solid fa-x" })
+    );
+
+    const editText = textarea(
+      {
+        style:
+          "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px",
+        class: "post-box",
+        onkeydown: async (e) => {
+          if (e.key === "Enter" && !e.shiftKey && !mobile()) {
+            e.preventDefault();
+            submit.click();
+          } else if (e.key === "Escape") {
+            e.preventDefault();
+            cancel.click();
+          }
+        },
+      },
+      data.p
+    );
+
+    const editField = span(
+      {
+        class: "edit-field",
+      },
+      editText,
+      cancel,
+      submit
+    );
+
+    text.after(editField);
   };
 
   const post = div(
@@ -384,83 +462,7 @@ const Post = (data) => {
                 {
                   class: "action edit-button",
                   onclick: async (e) => {
-                    e.stopImmediatePropagation();
-                    const text = document.querySelector(
-                      `[id="${data._id}"] .markdown-body`
-                    );
-                    text.style.display = "none";
-                    e.target.disabled = true;
-
-                    const submit = button(
-                      {
-                        style:
-                          "border: none; width: 40px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px",
-                        onclick: async () => {
-                          data.p = editText.value;
-                          await fetch(
-                            `https://api.meower.org/posts?id=${data._id}`,
-                            {
-                              method: "PATCH",
-                              headers: {
-                                "Content-Type": "application/json",
-                                Token: localStorage.getItem("ajs:token"),
-                              },
-                              body: JSON.stringify({
-                                content: editText.value,
-                              }),
-                            }
-                          );
-                          editField.remove();
-                          text.style.display = "block";
-                          e.target.disabled = false;
-                        },
-                      },
-
-                      i({ class: "fa-solid fa-check" })
-                    );
-
-                    const cancel = button(
-                      {
-                        style: "border: none; width: 40px; height: 40px",
-                        onclick: async () => {
-                          editField.remove();
-                          text.style.display = "block";
-                          e.target.disabled = false;
-                        },
-                      },
-
-                      i({ class: "fa-solid fa-x" })
-                    );
-
-                    const editText = textarea(
-                      {
-                        style:
-                          "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px",
-                        class: "post-box",
-                        onkeydown: async (e) => {
-                          if (e.key === "Enter" && !e.shiftKey && !mobile()) {
-                            e.preventDefault();
-                            submit.click();
-                          } else if (e.key === "Escape") {
-                            e.preventDefault();
-                            cancel.click();
-                          }
-                        },
-                      },
-                      data.p
-                    );
-
-                    const editField = span(
-                      {
-                        style: "display: flex; align-items: center",
-                        class: "edit-field",
-                      },
-                      editText,
-                      cancel,
-                      submit
-                    );
-
-                    text.after(editField);
+                    await editPost(e);
                   },
                 },
                 i({ class: "fa-solid fa-pencil" })
@@ -502,22 +504,67 @@ const Post = (data) => {
   post.ontouchstart = (e) => {
     touchstartX = e.changedTouches[0].screenX;
     touchstartY = e.changedTouches[0].screenY;
+    // if (!e.target.closest(".markdown-body")) e.preventDefault();
   };
 
-  post.ontouchend = (e) => {
+  post.ontouchmove = (e) => {
+    let xTop = e.touches[0].clientX;
+    let yTop = e.touches[0].clientY;
+    if (
+      e.target.closest(".post-header") &&
+      post.querySelector(".edit-field") === null
+    ) {
+      let xDiff = touchstartX - xTop;
+      let yDiff = touchstartY - yTop;
+
+      let px = 50 - (xDiff / 50) * 5 + 180.2;
+      if (data.u !== localStorage.getItem("ajs:user") && px > 0) {
+        px = 0;
+      }
+      post.style.marginLeft = `${px}px`;
+
+      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        if (xDiff > 0) {
+          e.preventDefault();
+        } else {
+          e.preventDefault();
+        }
+      }
+    }
+  };
+
+  post.ontouchend = async (e) => {
     touchendX = e.changedTouches[0].screenX;
     touchendY = e.changedTouches[0].screenY;
+    post.style.cssText = "";
+
+    const itsValid =
+      e.target.closest(".post-header") &&
+      post.querySelector(".edit-field") === null;
+
     if (
       touchendX < touchstartX &&
       Math.abs(touchendX - touchstartX) > 200 &&
-      e.target.closest(".post-header")
+      itsValid
     ) {
       post.classList.add("silly-replying-gesture");
       replyToPost();
       setTimeout(() => {
         post.classList.remove("silly-replying-gesture");
       }, 1000);
-    } else if (touchstartY === touchendY) {
+    } else if (
+      touchendX > touchstartX &&
+      Math.abs(touchendX - touchstartX) > 200 &&
+      itsValid &&
+      post.querySelector(".post-header b").innerText ===
+        localStorage.getItem("ajs:user")
+    ) {
+      post.classList.add("silly-editing-gesture");
+      await editPost(e);
+      setTimeout(() => {
+        post.classList.remove("silly-editing-gesture");
+      }, 1000);
+    } else if (touchstartY === touchendY && itsValid) {
       if (!tappedTwice) {
         tappedTwice = true;
         setTimeout(() => {
@@ -525,10 +572,12 @@ const Post = (data) => {
         }, 150);
         return;
       } else {
-        e.preventDefault();
-        if (!e.target.closest(".edit-field")) {
-          document.querySelector(".post-box").value = `@${data.author._id} `;
-          document.querySelector(".post-box").focus();
+        if (e.target.closest(".post-header")) {
+          e.preventDefault();
+          if (!e.target.closest(".edit-field")) {
+            document.querySelector(".post-box").value = `@${data.author._id} `;
+            document.querySelector(".post-box").focus();
+          }
         }
       }
     }
@@ -770,6 +819,17 @@ const Settings = () => {
               userList.append(li(u + (i === users.length - 1 ? "" : ", ")));
             }
           }
+        },
+      })
+    ),
+    p(
+      b("Aaaa make post time update every second"),
+      input({
+        type: "checkbox",
+        checked: sortUlist,
+        onchange: (e) => {
+          localStorage.setItem("ajs:date-update", e.target.checked);
+          everySecond = e.target.checked;
         },
       })
     )

@@ -35,4 +35,12 @@ html[data-theme="dark"] {
     .online-circle {
         filter: brightness(1.6) grayscale(0.4);
     }
+
+    .markdown-body a {
+        color: rgb(160, 170, 255);
+    }
+
+    .markdown-body a:visited {
+        color: rgb(160, 160, 195)
+    }
 }
