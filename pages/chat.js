@@ -194,16 +194,34 @@ const Post = (data) => {
   let attachments;
 
   if (data.reply_to && data.reply_to.filter((e) => e !== null).length !== 0) {
+    /** @param {string} e */
+    const fmtReply = (e) => {
+      let post = e;
+      if (post.length > 50) {
+        if (post.includes(" ")) {
+          post =
+            post
+              .split(" ")
+              .slice(0, Math.min(7, post.match(new RegExp(" ", "g")).length))
+              .join(" ") + "...";
+        } else {
+          post = post.slice(0, 20) + "...";
+        }
+      }
+      return post;
+    };
+
     replyBox = div(
       { class: "reply-header" },
       ...data.reply_to.map((e) => {
         return p(
           {
             class: "post",
-            style: "padding-bottom: 10px; margin-bottom: 0px; gap: 10px",
+            style:
+              "padding-bottom: 10px; margin-bottom: 0px; gap: 10px; flex-wrap: wrap",
           },
           b(`@${e.author._id}`),
-          e.p
+          span(fmtReply(e.p))
         );
       })
     );
