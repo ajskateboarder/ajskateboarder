@@ -14,6 +14,9 @@ let sortUlist = localStorage.getItem("ajs:sort-ulist") ?? false;
 let theme = localStorage.getItem("ajs:theme") ?? "light";
 
 const skateboardPfp = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAMAUExURQAAAB8fHx8fHyAgICEhIRERESAgICEhISEhISEhIRwcHB0dHSAgIBUVFRMTEyAgICAgICAgIBAQEBMTEyAgIBYWFhQUFCAgICAgIBcXFxwcHCAgICAgICAgICAgICAgIBMTEyAgIBERER8fHyAgICAgIBISEh8fHyEhISEhISAgICAgICAgICAgICAgIB4eHiEhISAgIBISEhQUFCAgICAgIBUVFR4eHiAgICAgICAgIBwcHB8fHyAgICAgICEhIRgYGCAgICAgICEhISAgICAgICAgICAgICEhISAgIBYWFiEhIR8fHxERESAgIB4eHh8fHyAgICAgIB0dHRsbGx8fHx4eHh8fHyAgICEhIR4eHh0dHSAgICAgIB8fHyAgIB0dHSAgICAgIB0dHSEhISAgICAgICAgIB8fHyAgICAgIB0dHSAgIB0dHR0dHRwcHB0dHSAgICAgICAgIBsbGx4eHiAgICEhISAgICAgICEhIRkZGSAgICAgICAgICEhISAgIBsbGx8fHyAgICAgICEhISEhISAgICAgICAgICAgIBwcHBERESEhISEhISAgIB8fHyEhIRgYGB8fHxgYGCEhISEhIR0dHR8fHyAgICEhISAgICAgICAgICAgICAgIBoaGhwcHCEhISEhISAgIBsbGyEhISAgICEhIRwcHCEhISAgICEhIR8fHyEhISEhISEhISAgIB8fHx0dHR4eHhwcHBgYGCAgIB8fHyAgIBsbGyEhISAgICAgIB0dHRwcHCEhIRQUFCAgIBwcHB8fHx8fHyAgICEhISEhISAgIBwcHCAgICAgIB8fHyAgIB8fHyAgICEhISEhISAgIBMTExoaGhoaGiAgIBcXFyEhIRISEh8fHxQUFCAgIB8fHxUVFSAgICAgICAgIBsbGxsbGx4eHiAgICEhIRYWFiAgIB8fHxoaGiEhISAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICEhISEhISAgIB0dHR4eHiEhIRgYGCAgICEhIYEB+2cAAAD/dFJOUwA7V/z9Afn++/keO/sKBf6C9gID8AYE+OUJJPqTkLqSApkJQo7XB1Ly/Nv99e57MPT3DQLm7A83jIeBMU6K4MkRbPT6rMjkfJhuDe9eBoY+R5HKNR1pMVZm9jsrvsZTrzinyTq98b/pP2fhJfIyFCMp782bJz3FjYjO9xOdi4mJjxs9jWqchYSFg5RACLC/sFrPI08VzI4vVXTqB7LZdXcZP8fuXznTlZQg503zUKCVim1gMDQcHO1Y4hrdeuctJqcIuCxDSnDRgtAf6pdLNlTf38TdDjg91SnxDGwXXUQVnvNxHiE82qEIpTcY49Soq7yusbm3tKTrrbYnLukM6HM+SxQAAAOJSURBVFjD5Zd3dFRFFMavurtvlU02yW42CSG9954IGEKKCUTTG6RDOiSkiGJDbKDYe++VYge7YC9gQSn2CjawACJY8fPtPk/YNvPe2z/8h++cPe+ePfO7M9/MvDvziA4/eV1cmB8xw+fqII/o8LiSIki66UQP+JbT/qNRWgvcn6WWzzNjXNH3JGOFSn56IOw0q3+20KQuwbH2PHoWzMLT/mr4iac7JMBz2g14SgXv3ebIYy59gjkqEix14pGh/RBblPOT4aKPvZMMfkr5Ka48MqlH/HnOa0xkxlZlvI8bHn2k1QsWRfxya/vjphocE2ymT/GmIv4CW/uoicGOCcLofRyvhL9Qai9onCzE0WuIUMAvg3vNLqcOPCbPV7r1L+oFenHQ+ITC/ePiX1QztaNWlj/V2f+RE46Sgm6ilzBTjj/Lpd8jjjna9jQ00sua9Oky/BLXqdNLPB4hKkGIDJ8Ppub6U5Wx6A4+v9iZGvePec9QUAzK1BQwyb9OCtY9TzQD9/Hr2SK2/5z1RAOC7/Vc/jy2f/NaoiaDkX+uRLP5B5qJ2ouRyuXPZvO+rxA9qEPyfB4fwuZ1bxOtts7lpZ7x+k1ErwbYRqJl8jVsXvMZUXWGLQxm1uMwNi8MEH3uK8WtLH6S456zl3E7UVQyEmwO6hj8RQ7vnKPEletPx1uNlyUknZLH6//QnnNQJdE3X+EkcfJiL2Hgpgi2f9QQdQ3iSy1n+c4JZfu39rzLjO/C2fgZPvEc/weyqG4UOzm3ovPNcPZvN5bfLTSUgp9N7OvbmW56HX//8Yc/peVgt0Xl6Tk+ltYg+us37OXwCw2c6UfbQWr5G794c+bfdfva+R/LpZF/sJ9bwGI4/n9aQH9m49dYbgEJYPv/9geaH4h93/MrcDHT/7s7aPhH7JG7mk9j8YHD9PU89HrJnYEnMPi+Edr4HoR35HiT4J5/cg3VPys+Q+US+Gnc8qvS6PFE24xWyGUIRKIrf1c9rZT+1kTKJbgcN97ihMffbqHObCmWv4tdgZibC1Ps8FKfa8h0WwBs3nTnyl/lb0U05T7aLa6G8NEHHan3ijW76loYr0sL1WsKTlZwl+vSYZJ1sSsipVfGO65XwLRqMYqNJEW6IQDZb3Rac2i/2NYw524gpcyL1GiowFr540fTbWVfuHJmueqPwjsfft16aiXljD3UcJWHn7XazFwvP/qf9S9iQ2YeHfeOgAAAAABJRU5ErkJggg==`;
+const emojiRegex =
+  /^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u;
+const discordRegex = /^<(a)?:\w+:\d+>$/gi;
 
 const mobile = () => {
   let check = false;
@@ -280,7 +283,7 @@ const Post = (data) => {
     avatar.src = skateboardPfp;
     avatar.classList.add("default-avatar");
   };
-
+  console.log(md.render(data.p));
   return div(
     { class: "post", id: data._id },
     span(
@@ -317,7 +320,7 @@ const Post = (data) => {
                       style:
                         "padding-bottom: 10px; margin-bottom: 0px; display: flex; justify-content: space-between",
                     },
-                    span(`@${data.author._id}`, " ", data.p),
+                    span(b(`@${data.author._id}`), " ", data.p),
                     button(
                       {
                         class: "action",
@@ -419,15 +422,9 @@ const Post = (data) => {
                     const editText = textarea(
                       {
                         style:
-                          "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px; height: 20px",
+                          "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px",
                         class: "post-box",
                         onkeydown: async (e) => {
-                          console.log(editText.scrollHeight);
-                          editText.style.height =
-                            editText.scrollHeight -
-                            parseFloat(getComputedStyle(editText).fontSize) *
-                              2 +
-                            "px";
                           if (e.key === "Enter" && !e.shiftKey && !mobile()) {
                             e.preventDefault();
                             submit.click();
@@ -461,12 +458,19 @@ const Post = (data) => {
         innerHTML: md
           .render(data.p)
           .replace(
-            /&lt;:.*:(.*)&gt;/g,
-            `<img src="https://cdn.discordapp.com/emojis/$1.webp?size=24&quality=lossless">`
+            /&lt;:(\w+)&gt;/g,
+            `
+            <object data="https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=24&quality=lossless" type="image/png">
+              <img src="https://uploads.meower.org/emojis/$1" style="height: 1.5rem; display: inline-block">
+            </object>`
           )
           .replace(
-            /&lt;:(.*)&gt;/g,
-            `<img src="https://uploads.meower.org/emojis/$1" style="height: 1.5rem; display: inline-block">`
+            /&lt;:(\w+):(\d+)&gt;/g,
+            '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=24&quality=lossless" alt="$1" title="$1" class="emoji">'
+          )
+          .replace(
+            /&lt;a:(\w+):(\d+)&gt;/g,
+            '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=24&quality=lossless" alt="$1" title="$1" class="emoji">'
           ),
       }),
       attachments
@@ -764,12 +768,16 @@ export default async function () {
           post.querySelector(".markdown-body").innerHTML = md
             .render(data.val.p)
             .replace(
-              /&lt;:.*:(.*)&gt;/g,
-              `<img src="https://cdn.discordapp.com/emojis/$1.webp?size=24&quality=lossless">`
+              /&lt;:(\w+)&gt;/g,
+              `<img src="https://uploads.meower.org/emojis/$1" style="height: 1.5rem; display: inline-block">`
             )
             .replace(
-              /&lt;:(.*)&gt;/g,
-              `<img src="https://uploads.meower.org/emojis/$1" style="height: 1.5rem; display: inline-block">`
+              /&lt;:(\w+):(\d+)&gt;/g,
+              '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=24&quality=lossless" alt="$1" title="$1" class="emoji">'
+            )
+            .replace(
+              /&lt;a:(\w+):(\d+)&gt;/g,
+              '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=24&quality=lossless" alt="$1" title="$1" class="emoji">'
             );
           post.querySelector(".edit-status").innerHTML = "&nbsp;(edited)";
         }
