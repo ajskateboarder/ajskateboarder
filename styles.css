@@ -166,7 +166,8 @@ body.chat {
     opacity: 0.5;
 }
 
-img.preview {
+img.preview,
+.markdown-body img {
     width: auto;
     height: auto;
     max-width: 100%;
@@ -202,7 +203,6 @@ audio.preview {
 }
 
 .markdown-body>p {
-    display: inline-flex;
     gap: 5px;
     align-items: center;
 }
