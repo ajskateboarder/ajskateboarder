@@ -198,7 +198,7 @@ const Post = (data) => {
     const fmtReply = (e) => {
       let post = e;
       if (post.length > 50) {
-        post = post.slice(0, 20) + "...";
+        post = post.slice(0, 30) + "...";
       }
       return post;
     };
@@ -504,18 +504,20 @@ const Post = (data) => {
     touchendX = e.changedTouches[0].screenX;
     touchendY = e.changedTouches[0].screenY;
     if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > 200) {
-      document.querySelector(".post-box").value = `@${data.author._id} `;
-      document.querySelector(".post-box").focus();
+      replyToPost();
     } else if (touchstartY === touchendY) {
       if (!tappedTwice) {
         tappedTwice = true;
         setTimeout(() => {
           tappedTwice = false;
-        }, 300);
+        }, 150);
         return;
       } else {
         e.preventDefault();
-        if (!e.target.closest(".edit-field")) replyToPost();
+        if (!e.target.closest(".edit-field")) {
+          document.querySelector(".post-box").value = `@${data.author._id} `;
+          document.querySelector(".post-box").focus();
+        }
       }
     }
   };
