@@ -507,7 +507,11 @@ const Post = (data) => {
   post.ontouchend = (e) => {
     touchendX = e.changedTouches[0].screenX;
     touchendY = e.changedTouches[0].screenY;
-    if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > 200) {
+    if (
+      touchendX < touchstartX &&
+      Math.abs(touchendX - touchstartX) > 200 &&
+      e.target.closest(".post-header")
+    ) {
       post.classList.add("silly-replying-gesture");
       replyToPost();
       setTimeout(() => {
