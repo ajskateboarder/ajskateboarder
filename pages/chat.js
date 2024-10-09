@@ -198,15 +198,7 @@ const Post = (data) => {
     const fmtReply = (e) => {
       let post = e;
       if (post.length > 50) {
-        if (post.includes(" ")) {
-          post =
-            post
-              .split(" ")
-              .slice(0, Math.min(7, post.match(new RegExp(" ", "g")).length))
-              .join(" ") + "...";
-        } else {
-          post = post.slice(0, 20) + "...";
-        }
+        post = post.slice(0, 20) + "...";
       }
       return post;
     };
@@ -291,18 +283,46 @@ const Post = (data) => {
       time.innerText = newTime;
     }
   }, 5000);
+
   const avatar = img({
     height: "48",
     class: `avatar ${data.author._id}`,
     width: "48",
     src: `https://uploads.meower.org/icons/${data.author.avatar}`,
+    onerror: () => {
+      avatar.src = skateboardPfp;
+      avatar.classList.add("default-avatar");
+    },
   });
-  avatar.onerror = () => {
-    avatar.src = skateboardPfp;
-    avatar.classList.add("default-avatar");
+
+  const replyToPost = () => {
+    replys.push(data._id);
+    document.querySelector(".post-box").focus();
+    document.querySelector("#replyList").append(
+      p(
+        {
+          class: "post",
+          id: `reply-${data._id}`,
+          style:
+            "padding-bottom: 10px; margin-bottom: 0px; display: flex; justify-content: space-between",
+        },
+        span(b(`@${data.author._id}`), " ", data.p),
+        button(
+          {
+            class: "action",
+            onclick: (e) => {
+              const index = replys.findIndex((e) => e === data._id);
+              replys = replys.slice(0, index).concat(replys.slice(index + 1));
+              document.querySelector(`[id="reply-${data._id}"]`).remove();
+            },
+          },
+          i({ class: "fa-solid fa-x" })
+        )
+      )
+    );
   };
-  console.log(md.render(data.p));
-  return div(
+
+  const post = div(
     { class: "post", id: data._id },
     span(
       avatar,
@@ -327,36 +347,7 @@ const Post = (data) => {
           button(
             {
               class: "action",
-              onclick: () => {
-                replys.push(data._id);
-                document.querySelector(".post-box").focus();
-                document.querySelector("#replyList").append(
-                  p(
-                    {
-                      class: "post",
-                      id: `reply-${data._id}`,
-                      style:
-                        "padding-bottom: 10px; margin-bottom: 0px; display: flex; justify-content: space-between",
-                    },
-                    span(b(`@${data.author._id}`), " ", data.p),
-                    button(
-                      {
-                        class: "action",
-                        onclick: (e) => {
-                          const index = replys.findIndex((e) => e === data._id);
-                          replys = replys
-                            .slice(0, index)
-                            .concat(replys.slice(index + 1));
-                          document
-                            .querySelector(`[id="reply-${data._id}"]`)
-                            .remove();
-                        },
-                      },
-                      i({ class: "fa-solid fa-x" })
-                    )
-                  )
-                );
-              },
+              onclick: replyToPost,
             },
             i({ class: "fa-solid fa-reply" })
           ),
@@ -456,7 +447,10 @@ const Post = (data) => {
                     );
 
                     const editField = span(
-                      { style: "display: flex; align-items: center" },
+                      {
+                        style: "display: flex; align-items: center",
+                        class: "edit-field",
+                      },
                       editText,
                       cancel,
                       submit
@@ -494,6 +488,39 @@ const Post = (data) => {
       attachments
     )
   );
+
+  let touchstartX,
+    touchstartY,
+    touchendX,
+    touchendY,
+    tappedTwice = false;
+
+  post.ontouchstart = (e) => {
+    touchstartX = e.changedTouches[0].screenX;
+    touchstartY = e.changedTouches[0].screenY;
+  };
+
+  post.ontouchend = (e) => {
+    touchendX = e.changedTouches[0].screenX;
+    touchendY = e.changedTouches[0].screenY;
+    if (touchendX < touchstartX && Math.abs(touchendX - touchstartX) > 200) {
+      document.querySelector(".post-box").value = `@${data.author._id} `;
+      document.querySelector(".post-box").focus();
+    } else if (touchstartY === touchendY) {
+      if (!tappedTwice) {
+        tappedTwice = true;
+        setTimeout(() => {
+          tappedTwice = false;
+        }, 300);
+        return;
+      } else {
+        e.preventDefault();
+        if (!e.target.closest(".edit-field")) replyToPost();
+      }
+    }
+  };
+
+  return post;
 };
 
 /** @param {File} file */
@@ -560,7 +587,6 @@ const updateFileList = (fileList) => {
       )
     );
   }
-  console.log(attachments);
 };
 
 /**
