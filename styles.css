@@ -128,7 +128,7 @@ body.chat main {
     padding: 9px;
     padding-bottom: 0px;
     display: flex;
-    gap: 20px
+    gap: 20px;
 }
 
 .post:hover {
@@ -317,6 +317,11 @@ audio.preview {
     }
 }
 
+.markdown-body {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
 html[data-compact="true"] {    
     .post {
         padding: 0px;
@@ -341,6 +346,10 @@ html[data-compact="true"] {
         margin: 0;
         padding: 0;
         margin-top: -10px;
+    }
+
+    .post:has(.reply) .markdown-body {
+        margin-top: 0px;
     }
 
     .post {
