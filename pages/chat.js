@@ -403,6 +403,7 @@ const Post = (data) => {
 
     text.after(editField);
     editText.focus();
+    editText.selectionStart = editText.value.length;
   };
 
   const post = div(
