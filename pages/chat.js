@@ -6,13 +6,15 @@ const { textarea, ul, li, details, summary, b, div, i, span, button, p, br, img,
 
 const usersTyping = {};
 
-let replys = [];
+let replies = [];
 let attachments = [];
 let fileNames = [];
 
-let everySecond = localStorage.getItem("ajs:date-update") ?? false;
-let sortUlist = localStorage.getItem("ajs:sort-ulist") ?? false;
+let everySecond = (localStorage.getItem("ajs:date-update") ?? "false") === "true";
+let sortUlist = (localStorage.getItem("ajs:sort-ulist") ?? false) === "true";
 let theme = localStorage.getItem("ajs:theme") ?? "light";
+let compact = (localStorage.getItem("ajs:compact") ?? "false") === "true";
+let infiniteScroll = (localStorage.getItem("ajs:infinite-scroll") ?? "true") === "true";
 
 const skateboardPfp = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAMAUExURQAAAB8fHx8fHyAgICEhIRERESAgICEhISEhISEhIRwcHB0dHSAgIBUVFRMTEyAgICAgICAgIBAQEBMTEyAgIBYWFhQUFCAgICAgIBcXFxwcHCAgICAgICAgICAgICAgIBMTEyAgIBERER8fHyAgICAgIBISEh8fHyEhISEhISAgICAgICAgICAgICAgIB4eHiEhISAgIBISEhQUFCAgICAgIBUVFR4eHiAgICAgICAgIBwcHB8fHyAgICAgICEhIRgYGCAgICAgICEhISAgICAgICAgICAgICEhISAgIBYWFiEhIR8fHxERESAgIB4eHh8fHyAgICAgIB0dHRsbGx8fHx4eHh8fHyAgICEhIR4eHh0dHSAgICAgIB8fHyAgIB0dHSAgICAgIB0dHSEhISAgICAgICAgIB8fHyAgICAgIB0dHSAgIB0dHR0dHRwcHB0dHSAgICAgICAgIBsbGx4eHiAgICEhISAgICAgICEhIRkZGSAgICAgICAgICEhISAgIBsbGx8fHyAgICAgICEhISEhISAgICAgICAgICAgIBwcHBERESEhISEhISAgIB8fHyEhIRgYGB8fHxgYGCEhISEhIR0dHR8fHyAgICEhISAgICAgICAgICAgICAgIBoaGhwcHCEhISEhISAgIBsbGyEhISAgICEhIRwcHCEhISAgICEhIR8fHyEhISEhISEhISAgIB8fHx0dHR4eHhwcHBgYGCAgIB8fHyAgIBsbGyEhISAgICAgIB0dHRwcHCEhIRQUFCAgIBwcHB8fHx8fHyAgICEhISEhISAgIBwcHCAgICAgIB8fHyAgIB8fHyAgICEhISEhISAgIBMTExoaGhoaGiAgIBcXFyEhIRISEh8fHxQUFCAgIB8fHxUVFSAgICAgICAgIBsbGxsbGx4eHiAgICEhIRYWFiAgIB8fHxoaGiEhISAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICEhISEhISAgIB0dHR4eHiEhIRgYGCAgICEhIYEB+2cAAAD/dFJOUwA7V/z9Afn++/keO/sKBf6C9gID8AYE+OUJJPqTkLqSApkJQo7XB1Ly/Nv99e57MPT3DQLm7A83jIeBMU6K4MkRbPT6rMjkfJhuDe9eBoY+R5HKNR1pMVZm9jsrvsZTrzinyTq98b/pP2fhJfIyFCMp782bJz3FjYjO9xOdi4mJjxs9jWqchYSFg5RACLC/sFrPI08VzI4vVXTqB7LZdXcZP8fuXznTlZQg503zUKCVim1gMDQcHO1Y4hrdeuctJqcIuCxDSnDRgtAf6pdLNlTf38TdDjg91SnxDGwXXUQVnvNxHiE82qEIpTcY49Soq7yusbm3tKTrrbYnLukM6HM+SxQAAAOJSURBVFjD5Zd3dFRFFMavurtvlU02yW42CSG9954IGEKKCUTTG6RDOiSkiGJDbKDYe++VYge7YC9gQSn2CjawACJY8fPtPk/YNvPe2z/8h++cPe+ePfO7M9/MvDvziA4/eV1cmB8xw+fqII/o8LiSIki66UQP+JbT/qNRWgvcn6WWzzNjXNH3JGOFSn56IOw0q3+20KQuwbH2PHoWzMLT/mr4iac7JMBz2g14SgXv3ebIYy59gjkqEix14pGh/RBblPOT4aKPvZMMfkr5Ka48MqlH/HnOa0xkxlZlvI8bHn2k1QsWRfxya/vjphocE2ymT/GmIv4CW/uoicGOCcLofRyvhL9Qai9onCzE0WuIUMAvg3vNLqcOPCbPV7r1L+oFenHQ+ITC/ePiX1QztaNWlj/V2f+RE46Sgm6ilzBTjj/Lpd8jjjna9jQ00sua9Oky/BLXqdNLPB4hKkGIDJ8Ppub6U5Wx6A4+v9iZGvePec9QUAzK1BQwyb9OCtY9TzQD9/Hr2SK2/5z1RAOC7/Vc/jy2f/NaoiaDkX+uRLP5B5qJ2ouRyuXPZvO+rxA9qEPyfB4fwuZ1bxOtts7lpZ7x+k1ErwbYRqJl8jVsXvMZUXWGLQxm1uMwNi8MEH3uK8WtLH6S456zl3E7UVQyEmwO6hj8RQ7vnKPEletPx1uNlyUknZLH6//QnnNQJdE3X+EkcfJiL2Hgpgi2f9QQdQ3iSy1n+c4JZfu39rzLjO/C2fgZPvEc/weyqG4UOzm3ovPNcPZvN5bfLTSUgp9N7OvbmW56HX//8Yc/peVgt0Xl6Tk+ltYg+us37OXwCw2c6UfbQWr5G794c+bfdfva+R/LpZF/sJ9bwGI4/n9aQH9m49dYbgEJYPv/9geaH4h93/MrcDHT/7s7aPhH7JG7mk9j8YHD9PU89HrJnYEnMPi+Edr4HoR35HiT4J5/cg3VPys+Q+US+Gnc8qvS6PFE24xWyGUIRKIrf1c9rZT+1kTKJbgcN97ihMffbqHObCmWv4tdgZibC1Ps8FKfa8h0WwBs3nTnyl/lb0U05T7aLa6G8NEHHan3ijW76loYr0sL1WsKTlZwl+vSYZJ1sSsipVfGO65XwLRqMYqNJEW6IQDZb3Rac2i/2NYw524gpcyL1GiowFr540fTbWVfuHJmueqPwjsfft16aiXljD3UcJWHn7XazFwvP/qf9S9iQ2YeHfeOgAAAAABJRU5ErkJggg==`;
 const emojiRegex =
@@ -81,9 +83,8 @@ const UserList = (connection) => {
         });
         list.append(li(user + (i === users.length - 1 ? "" : ", ")));
       }
-      userCount.innerText = `${users.length} user${
-        users.length === 1 ? "" : "s"
-      } online`;
+      userCount.innerText = `${users.length} user${users.length === 1 ? "" : "s"
+        } online`;
     }
   });
   return details(
@@ -209,11 +210,13 @@ const Post = (data) => {
       ...data.reply_to.map((e) => {
         return p(
           {
-            class: "post",
+            class: "post reply",
             style:
-              "padding-bottom: 10px; margin-bottom: 0px; gap: 10px; flex-wrap: wrap",
+              "display: block; margin-bottom: 0px; gap: 10px",
           },
-          b(`@${e.author._id}`),
+          i({ class: "fa-solid fa-reply", style: "transform: scaleX(-1)" }),
+          " ",
+          b(`@${e.author._id} `),
           span(fmtReply(e.p))
         );
       })
@@ -300,12 +303,12 @@ const Post = (data) => {
   });
 
   const replyToPost = () => {
-    replys.push(data._id);
+    replies.push(data._id);
     document.querySelector(".post-box").focus();
     document.querySelector("#replyList").append(
       p(
         {
-          class: "post",
+          class: "post reply-thing",
           id: `reply-${data._id}`,
           style:
             "padding-bottom: 10px; margin-bottom: 0px; display: flex; justify-content: space-between",
@@ -319,8 +322,8 @@ const Post = (data) => {
           {
             class: "action",
             onclick: (e) => {
-              const index = replys.findIndex((e) => e === data._id);
-              replys = replys.slice(0, index).concat(replys.slice(index + 1));
+              const index = replies.findIndex((e) => e === data._id);
+              replies = replies.slice(0, index).concat(replies.slice(index + 1));
               document.querySelector(`[id="reply-${data._id}"]`).remove();
             },
           },
@@ -339,7 +342,7 @@ const Post = (data) => {
     const submit = button(
       {
         style:
-          "border: none; width: 40px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px",
+          "border: none; width: 60px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px",
         onclick: async () => {
           data.p = editText.value;
           await fetch(`https://api.meower.org/posts?id=${data._id}`, {
@@ -363,7 +366,7 @@ const Post = (data) => {
 
     const cancel = button(
       {
-        style: "border: none; width: 40px; height: 40px",
+        style: "border: none; width: 60px; height: 40px",
         onclick: async () => {
           editField.remove();
           text.style.display = "block";
@@ -376,6 +379,14 @@ const Post = (data) => {
 
     const editText = textarea(
       {
+        oninput: () => {
+          editText.style.height = "";
+          editText.style.height = editText.scrollHeight + "px"
+          cancel.style.height = "";
+          cancel.style.height = editText.scrollHeight + "px"
+          submit.style.height = "";
+          submit.style.height = editText.scrollHeight + "px"
+        },
         style:
           "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px",
         class: "post-box",
@@ -412,13 +423,12 @@ const Post = (data) => {
       avatar,
       div({
         class: "online-circle",
-        style: `display: ${
-          [...document.querySelectorAll(".user-list > li")]
-            .map((e) => e.innerHTML.replace(", ", ""))
-            .includes(data.author._id)
-            ? "block"
-            : "none"
-        }`,
+        style: `display: ${[...document.querySelectorAll(".user-list > li")]
+          .map((e) => e.innerHTML.replace(", ", ""))
+          .includes(data.author._id)
+          ? "block"
+          : "none"
+          }`,
       })
     ),
     span(
@@ -437,38 +447,38 @@ const Post = (data) => {
           ),
           data.author._id === localStorage.getItem("ajs:user")
             ? button(
-                {
-                  class: "action",
-                  onclick: async (e) => {
-                    if (!e.shiftKey) {
-                      if (
-                        !confirm("Are you sure you want to delete this post?")
-                      ) {
-                        return;
-                      }
+              {
+                class: "action",
+                onclick: async (e) => {
+                  if (!e.shiftKey) {
+                    if (
+                      !confirm("Are you sure you want to delete this post?")
+                    ) {
+                      return;
                     }
-                    await fetch(`https://api.meower.org/posts?id=${data._id}`, {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Token: localStorage.getItem("ajs:token"),
-                      },
-                    });
-                  },
+                  }
+                  await fetch(`https://api.meower.org/posts?id=${data._id}`, {
+                    method: "DELETE",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Token: localStorage.getItem("ajs:token"),
+                    },
+                  });
                 },
-                i({ class: "fa-solid fa-trash" })
-              )
+              },
+              i({ class: "fa-solid fa-trash" })
+            )
             : undefined,
           data.author._id === localStorage.getItem("ajs:user")
             ? button(
-                {
-                  class: "action edit-button",
-                  onclick: async (e) => {
-                    await editPost(e);
-                  },
+              {
+                class: "action edit-button",
+                onclick: async (e) => {
+                  await editPost(e);
                 },
-                i({ class: "fa-solid fa-pencil" })
-              )
+              },
+              i({ class: "fa-solid fa-pencil" })
+            )
             : undefined
         )
       ),
@@ -493,7 +503,7 @@ const Post = (data) => {
             '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=24&quality=lossless" alt="$1" title="$1" class="emoji">'
           ),
       }),
-      attachments
+      attachments,
     )
   );
 
@@ -546,7 +556,7 @@ const Post = (data) => {
 
     if (
       touchendX < touchstartX &&
-      Math.abs(touchendX - touchstartX) > 200 &&
+      Math.abs(touchendX - touchstartX) > 150 &&
       itsValid
     ) {
       post.classList.add("silly-replying-gesture");
@@ -556,13 +566,13 @@ const Post = (data) => {
       }, 1000);
     } else if (
       touchendX > touchstartX &&
-      Math.abs(touchendX - touchstartX) > 200 &&
+      Math.abs(touchendX - touchstartX) > 150 &&
       itsValid &&
       post.querySelector(".post-header b").innerText ===
-        localStorage.getItem("ajs:user")
+      localStorage.getItem("ajs:user")
     ) {
       post.classList.add("silly-editing-gesture");
-      await editPost(e);
+      await editPost({ stopImmediatePropagation() { }, target: post.querySelector(".edit-button") });
       setTimeout(() => {
         post.classList.remove("silly-editing-gesture");
       }, 1000);
@@ -618,8 +628,7 @@ const updateFileList = (fileList) => {
     fileList.append(
       span(
         span(
-          `Uploading ${fileNames.length} file${
-            fileNames.length > 1 ? "s" : ""
+          `Uploading ${fileNames.length} file${fileNames.length > 1 ? "s" : ""
           }: `
         ),
         span(
@@ -665,6 +674,14 @@ const PostBox = (lurking, fileInput, fileList) => {
   const post = textarea({
     class: "post-box",
     placeholder: "Whar's on your mind?",
+    oninput: () => {
+      post.style.height = "";
+      post.style.height = post.scrollHeight + "px"
+      upload.style.height = "";
+      upload.style.height = post.scrollHeight + "px"
+      send.style.height = "";
+      send.style.height = post.scrollHeight + "px"
+    },
     style: "font-size: 13px",
     onkeydown: async (e) => {
       if (e.key === "Enter" && !e.shiftKey && !mobile()) {
@@ -720,7 +737,7 @@ const PostBox = (lurking, fileInput, fileList) => {
             Token: token,
           },
           body: JSON.stringify({
-            reply_to: replys,
+            reply_to: replies,
             content: post.value,
             attachments,
             nonce: Math.random().toString(),
@@ -728,7 +745,7 @@ const PostBox = (lurking, fileInput, fileList) => {
         });
         post.value = "";
         fileInput.value = null;
-        replys.length = 0;
+        replies.length = 0;
         fileNames.length = 0;
         attachments.length = 0;
         document.querySelector("#fileList").innerText = "";
@@ -745,6 +762,8 @@ const PostBox = (lurking, fileInput, fileList) => {
 /** @param {WebSocket} connection */
 const Posts = async (connection) => {
   const posts = div({ class: "posts" });
+  let page = 2;
+  const loadedPages = [];
 
   /** @type {any[]} */
   const homePosts = (await (await fetch("https://api.meower.org/home")).json())
@@ -762,7 +781,40 @@ const Posts = async (connection) => {
     }
   });
 
-  return posts;
+  const loadMore = async () => {
+    loadedPages.push(page)
+    /** @type {any[]} */
+    const morePosts = (await (await fetch(`https://api.meower.org/home?page=${page}`, { headers: { Token: localStorage.getItem("ajs:token") } })).json())
+      .autoget;
+    for (const post of morePosts) {
+      posts.prepend(Post(post));
+    }
+    page++;
+  }
+
+  if (infiniteScroll) {
+    window.onscroll = async () => {
+      if ((window.innerHeight + Math.round(document.documentElement.scrollTop)) >= document.body.offsetHeight - 150 && !loadedPages.includes(page)) {
+        await loadMore()
+      }
+    };
+  }
+
+  return span(
+    posts,
+    infiniteScroll ?
+      i({ class: "fa-solid fa-xl fa-ellipsis", style: "width: 100%; text-align: center" })
+      :
+      button({
+        class: "regular-button",
+        style: "width: 100%; height: 40px",
+        onclick: async (e) => {
+          e.target.disabled = true;
+          await loadMore()
+          e.target.disabled = false;
+        }
+      }, "Load more")
+  );
 };
 
 const formatBytes = (n) => {
@@ -828,13 +880,37 @@ const Settings = () => {
       b("Aaaa make post time update every second"),
       input({
         type: "checkbox",
-        checked: sortUlist,
+        checked: everySecond,
         onchange: (e) => {
           localStorage.setItem("ajs:date-update", e.target.checked);
           everySecond = e.target.checked;
         },
       })
-    )
+    ),
+    p(
+      b("Hydraulic press"),
+      input({
+        type: "checkbox",
+        checked: compact,
+        onchange: (e) => {
+          localStorage.setItem("ajs:compact", e.target.checked);
+          compact = e.target.checked;
+          document.documentElement.dataset.compact = `${compact}`
+        },
+      })
+    ),
+    p(
+      b("Infinite scrolling"),
+      input({
+        type: "checkbox",
+        checked: infiniteScroll,
+        onchange: (e) => {
+          localStorage.setItem("ajs:infinite-scroll", e.target.checked);
+          infiniteScroll = e.target.checked;
+        },
+      })
+    ),
+    p("You may need to reload for some of these settings to fully apply.")
   );
 };
 
@@ -842,6 +918,10 @@ export default async function () {
   sidebar.innerHTML = "";
   contents.innerHTML = "";
   document.body.className = "chat";
+
+  if (compact) {
+    document.documentElement.dataset.compact = "true"
+  }
 
   const ws = new WebSocket("wss://server.meower.org?v=1");
 
@@ -917,7 +997,7 @@ export default async function () {
         fileList
       ),
       br(),
-      await Posts(ws)
+      await Posts(ws),
     );
 
     contents.append(Settings());
