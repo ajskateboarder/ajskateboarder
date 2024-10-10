@@ -517,11 +517,11 @@ const Post = (data) => {
       let xDiff = touchstartX - xTop;
       let yDiff = touchstartY - yTop;
 
-      let px = xDiff / -4;
+      let px = xDiff / -3.2;
       if (data.u !== localStorage.getItem("ajs:user") && px > 0) {
         px = 0;
       }
-      post.style.marginLeft = `${px}px`;
+      post.style.transform = `translateX(${px}px)`;
 
       if (Math.abs(xDiff) > Math.abs(yDiff)) {
         if (xDiff > 0) {
