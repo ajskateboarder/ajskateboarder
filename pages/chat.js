@@ -178,7 +178,7 @@ function timeAgo(epochTime) {
   const secondsAgo = Math.floor((now - epochTime * 1000) / 1000); // Convert epoch time to milliseconds and calculate seconds ago
 
   if (secondsAgo < 60) {
-    return `${secondsAgo} secs ago`;
+    return `${Math.max(0, secondsAgo)} secs ago`;
   } else if (secondsAgo < 3600) {
     const minutesAgo = Math.floor(secondsAgo / 60);
     return `${minutesAgo} min${minutesAgo === 1 ? "" : "s"} ago`;
