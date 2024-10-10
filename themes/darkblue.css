@@ -1,0 +1,76 @@
+:root {
+    --dark-blue: #4880f8;
+    --secondary-dark-blue: #274483;
+}
+
+html[data-theme="darkblue"] {
+    background-color: #111;
+    color: #FBFAF5;
+
+    .top-level-stuff {
+        background-color: #111;
+    }
+
+    dialog {
+        background-color: #111;
+        border: 1px solid #FBFAF5;
+        color: #FBFAF5;
+    }
+
+    [class=post] {
+        border: 2px solid var(--dark-blue);
+        border-radius: 5px;
+        padding: 3px;
+        background: none;
+    }
+
+    .reply {
+        border: 2px solid var(--dark-blue);
+    }
+
+    select,
+    input,
+    textarea {
+        background-color: #111;
+        color: #FBFAF5;
+    }
+
+    button {
+        background-color: var(--dark-blue);
+        color: white;
+    }
+
+    input[type=checkbox] {
+        accent-color: var(--dark-blue);
+    }
+
+    .default-avatar {
+        filter: invert(1);
+    }
+
+    button:hover {
+        filter: brightness(0.7);
+    }
+
+    .online-circle {
+        filter: brightness(1.6) grayscale(0.4);
+    }
+
+    .markdown-body a {
+        color: #7289da;
+    }
+
+    .markdown-body a:visited {
+        color: #99aab5;
+    }
+
+    [class=post-box] {
+        border-top: 2px solid var(--secondary-dark-blue);
+        border-bottom: 2px solid var(--secondary-dark-blue);
+    }
+
+    [class="post-box edit-box"] {
+        border: 2px solid var(--secondary-dark-blue);
+        border-right: none;
+    }
+}

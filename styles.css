@@ -322,24 +322,28 @@ audio.preview {
     overflow-y: auto;
 }
 
-html[data-compact="true"] {    
+html[data-compact="true"] {
     .post {
         padding: 0px;
         margin: 0px;
         background: transparent;
         gap: 10px;
     }
-    
+
     .post .avatar {
         transform: scale(0.7);
     }
-    
+
     .post .online-circle {
         transform: scale(0.7) translateY(-10px);
     }
 
     .reply {
-        background: transparent; opacity: 0.5; word-wrap: anywhere; padding: 0px;
+        background: transparent;
+        opacity: 0.5;
+        word-wrap: anywhere;
+        padding: 0px;
+        margin: 0;
     }
 
     .markdown-body {

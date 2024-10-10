@@ -162,7 +162,7 @@ const Navbar = (connection) => {
       Signout(connection),
       button(
         {
-          class: "action",
+          class: "action the-settings-button",
           onclick: () => {
             document.querySelector("dialog").showModal();
           },
@@ -212,9 +212,9 @@ const Post = (data) => {
           {
             class: "post reply",
             style:
-              "display: block; margin-bottom: 0px; gap: 10px",
+              "gap: 10px; vertical-align: middle",
           },
-          i({ class: "fa-solid fa-reply", style: "transform: scaleX(-1)" }),
+          i({ class: "fa-solid fa-reply", style: "transform: scaleX(-1); padding: 5px" }),
           " ",
           b(`@${e.author._id} `),
           span(fmtReply(e.p))
@@ -342,7 +342,7 @@ const Post = (data) => {
     const submit = button(
       {
         style:
-          "border: none; width: 60px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px",
+          "width: 60px; height: 40px; border: none; border-top-right-radius: 5px; border-bottom-right-radius: 5px",
         onclick: async () => {
           data.p = editText.value;
           await fetch(`https://api.meower.org/posts?id=${data._id}`, {
@@ -366,7 +366,7 @@ const Post = (data) => {
 
     const cancel = button(
       {
-        style: "border: none; width: 60px; height: 40px",
+        style: "width: 60px; height: 40px; border: none",
         onclick: async () => {
           editField.remove();
           text.style.display = "block";
@@ -389,7 +389,7 @@ const Post = (data) => {
         },
         style:
           "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px",
-        class: "post-box",
+        class: "post-box edit-box",
         onkeydown: async (e) => {
           if (e.key === "Enter" && !e.shiftKey && !mobile()) {
             e.preventDefault();
@@ -751,6 +751,9 @@ const PostBox = (lurking, fileInput, fileList) => {
         document.querySelector("#fileList").innerText = "";
         document.querySelector("#replyList").innerHTML = "";
         send.disabled = false;
+        upload.style.height = "";
+        send.style.height = "";
+        post.style.height = "";
       },
     },
     i({ class: "fa-solid fa-paper-plane" })
@@ -805,6 +808,7 @@ const Posts = async (connection) => {
     infiniteScroll ?
       button({
         class: "regular-button load-more",
+        style: "pointer-events: none"
       }, i({ class: "fa-solid fa-ellipsis" }))
       :
       button({
@@ -835,7 +839,9 @@ const Settings = () => {
       },
     },
     option({ value: "light" }, "ah its blinding my eyes"),
-    option({ value: "dark" }, "normal people theme")
+    option({ value: "dark" }, "normal people theme"),
+    option({ value: "darkish" }, "normal people but discord-y"),
+    option({ value: "darkblue" }, "dark blue from svelte")
   );
   themes.querySelector(`[value=${theme}]`).setAttribute("selected", "selected");
 
@@ -919,6 +925,7 @@ export default async function () {
   sidebar.innerHTML = "";
   contents.innerHTML = "";
   document.body.className = "chat";
+  document.body.append(span({"class": "loading"}, "loading..."))
 
   if (compact) {
     document.documentElement.dataset.compact = "true"
@@ -1002,5 +1009,6 @@ export default async function () {
     );
 
     contents.append(Settings());
+    document.querySelector(".loading").remove()
   };
 }
