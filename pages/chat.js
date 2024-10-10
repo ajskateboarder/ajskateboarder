@@ -402,6 +402,7 @@ const Post = (data) => {
     );
 
     text.after(editField);
+    editText.focus();
   };
 
   const post = div(
