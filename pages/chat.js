@@ -517,7 +517,7 @@ const Post = (data) => {
       let xDiff = touchstartX - xTop;
       let yDiff = touchstartY - yTop;
 
-      let px = 50 - (xDiff / 50) * 5 + 180.2;
+      let px = xDiff / -4;
       if (data.u !== localStorage.getItem("ajs:user") && px > 0) {
         px = 0;
       }
