@@ -803,11 +803,12 @@ const Posts = async (connection) => {
   return span(
     posts,
     infiniteScroll ?
-      i({ class: "fa-solid fa-xl fa-ellipsis", style: "width: 100%; text-align: center" })
+      button({
+        class: "regular-button load-more",
+      }, i({ class: "fa-solid fa-ellipsis" }))
       :
       button({
-        class: "regular-button",
-        style: "width: 100%; height: 40px",
+        class: "regular-button load-more",
         onclick: async (e) => {
           e.target.disabled = true;
           await loadMore()
