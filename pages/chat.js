@@ -212,7 +212,7 @@ const Post = (data) => {
           {
             class: "post reply",
             style:
-              "gap: 10px; vertical-align: middle",
+              "display: block; gap: 10px; vertical-align: middle",
           },
           i({ class: "fa-solid fa-reply", style: "transform: scaleX(-1); padding: 5px" }),
           " ",
