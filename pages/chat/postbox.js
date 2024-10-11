@@ -1,6 +1,6 @@
-import { van } from "..";
-import { mobile } from "../utils";
-import { refs } from "./refs";
+import { van } from "../index.js";
+import { mobile } from "../utils.js";
+import { refs } from "./refs.js";
 
 const { textarea, button, span, a, i } = van.tags;
 

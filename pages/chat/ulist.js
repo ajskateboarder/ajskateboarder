@@ -1,5 +1,5 @@
-import { van } from "..";
-import { refs, settings } from "./refs";
+import { van } from "../index.js";
+import { refs, settings } from "./refs.js";
 
 const { span, ul, details, summary, li } = van.tags;
 

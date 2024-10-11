@@ -1,8 +1,8 @@
-import { md, van } from "..";
-import skateboard from "../skateboard";
-import { mobile } from "../utils";
-import { formatBytes } from "./postbox";
-import { settings, refs } from "./refs";
+import { md, van } from "../index.js";
+import skateboard from "../skateboard.js";
+import { mobile } from "../utils.js";
+import { formatBytes } from "./postbox.js";
+import { settings, refs } from "./refs.js";
 
 // prettier-ignore
 const { div, p, i, a, b, span, video, img, dialog, audio, button, source, textarea, small } = van.tags;

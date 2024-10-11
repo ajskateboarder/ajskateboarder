@@ -1,6 +1,6 @@
-import { van, sidebar, contents, md } from "../index.js";
-import login from "../login.js";
-import { Posts } from "./post.js";
+import { van, sidebar, contents, md } from "/pages/index.js";
+import login from "/pages/login.js";
+import { Posts } from "/pages/chat/post.js";
 
 import { formatBytes, PostBox, updateFileList, uploadFile } from "./postbox.js";
 import { refs, settings } from "./refs.js";
@@ -60,7 +60,7 @@ const Settings = () => {
     option({ value: "darkish" }, "normal people but discord-y"),
     option({ value: "darkblue" }, "dark blue from svelte"),
   );
-  themes.querySelector(`[value=${theme}]`).setAttribute("selected", "selected");
+  themes.querySelector(`[value=${settings.theme}]`).setAttribute("selected", "selected");
 
   return dialog(
     { class: "settings" },
@@ -214,8 +214,9 @@ export default async function () {
       br(),
       await Posts(ws),
     );
-
+    
     contents.append(Settings());
+    
     document.querySelector(".loading").remove();
   };
 }
