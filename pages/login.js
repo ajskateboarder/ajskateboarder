@@ -1,5 +1,5 @@
-import chat from "/chat/index.js";
-import { van, sidebar, contents } from "/index.js";
+import chat from "./chat/index.js";
+import { van, sidebar, contents } from "./index.js";
 
 // prettier-ignore
 const { div, input, h2, p, button, i, span } = van.tags;
