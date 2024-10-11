@@ -1,6 +1,6 @@
 import { van, sidebar, contents, md } from "./index.js";
 import login from "./login.js";
-import { skateboardPfp, carOnSkateboard } from "./images.js";
+import skateboardPfp from "./images.js";
 
 // prettier-ignore
 const { textarea, ul, li, details, summary, b, div, i, span, button, p, br, img, video, input, small, audio, source, a, dialog, h2, select, option } = van.tags;
@@ -925,8 +925,7 @@ export default async function () {
   sidebar.innerHTML = "";
   contents.innerHTML = "";
   document.body.className = "chat";
-  document.body.append(span({"class": "loading"}, h2("loading"), img({src: carOnSkateboard, height: "100", width: "100"})))
-
+  document.body.append(span({"class": "loading"}, "loading"));
   if (compact) {
     document.documentElement.dataset.compact = "true"
   }
