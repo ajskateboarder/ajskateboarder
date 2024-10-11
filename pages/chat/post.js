@@ -53,9 +53,9 @@ export const Post = (data) => {
           }),
           " ",
           b(`@${e.author._id} `),
-          span(fmtReply(e.p)),
+          span(fmtReply(e.p))
         );
-      }),
+      })
     );
   }
 
@@ -78,7 +78,7 @@ export const Post = (data) => {
                 img({
                   style: "max-height: 100vw",
                   src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}`,
-                }),
+                })
               );
               const ev = (e) => {
                 if (e.target.closest(".image-view")) {
@@ -99,23 +99,23 @@ export const Post = (data) => {
             source({
               src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
               type: e.mime,
-            }),
+            })
           );
         } else {
           return a(
             {
               href: ``,
             },
-            `Download ${e.filename} (${formatBytes(e.size)})`,
+            `Download ${e.filename} (${formatBytes(e.size)})`
           );
         }
-      }),
+      })
     );
   }
 
   const time = span(
     { style: "color: grey", title: new Date(data.t.e * 1000).toString() },
-    "• " + timeAgo(data.t.e - 1),
+    "• " + timeAgo(data.t.e - 1)
   );
   setInterval(
     () => {
@@ -124,7 +124,7 @@ export const Post = (data) => {
         time.innerText = newTime;
       }
     },
-    settings.everySecond ? 1000 : 5000,
+    settings.everySecond ? 1000 : 5000
   );
 
   const avatar = img({
@@ -152,7 +152,7 @@ export const Post = (data) => {
         span(
           b(`@${data.author._id}`),
           " ",
-          data.p.length > 50 ? data.p.slice(0, 30) + "..." : data.p,
+          data.p.length > 50 ? data.p.slice(0, 30) + "..." : data.p
         ),
         button(
           {
@@ -165,9 +165,9 @@ export const Post = (data) => {
               document.querySelector(`[id="reply-${data._id}"]`).remove();
             },
           },
-          i({ class: "fa-solid fa-x" }),
-        ),
-      ),
+          i({ class: "fa-solid fa-x" })
+        )
+      )
     );
   };
 
@@ -199,7 +199,7 @@ export const Post = (data) => {
         },
       },
 
-      i({ class: "fa-solid fa-check" }),
+      i({ class: "fa-solid fa-check" })
     );
 
     const cancel = button(
@@ -212,18 +212,18 @@ export const Post = (data) => {
         },
       },
 
-      i({ class: "fa-solid fa-x" }),
+      i({ class: "fa-solid fa-x" })
     );
 
     const editText = textarea(
       {
         oninput: () => {
           editText.style.height = "";
-          editText.style.height = editText.scrollHeight + "px";
-          cancel.style.height = "";
-          cancel.style.height = editText.scrollHeight + "px";
+          editText.style.height = Math.max(40, editText.scrollHeight) + "px";
           submit.style.height = "";
-          submit.style.height = editText.scrollHeight + "px";
+          submit.style.height = Math.max(40, editText.scrollHeight) + "px";
+          cancel.style.height = "";
+          cancel.style.height = Math.max(40, editText.scrollHeight) + "px";
         },
         style:
           "border-top-left-radius: 5px; border-bottom-left-radius: 5px; padding: 5px",
@@ -238,7 +238,7 @@ export const Post = (data) => {
           }
         },
       },
-      data.p,
+      data.p
     );
 
     const editField = span(
@@ -247,7 +247,7 @@ export const Post = (data) => {
       },
       editText,
       cancel,
-      submit,
+      submit
     );
 
     text.after(editField);
@@ -268,7 +268,7 @@ export const Post = (data) => {
             ? "block"
             : "none"
         }`,
-      }),
+      })
     ),
     span(
       { style: "display: flex; flex-direction: column; width: 100%" },
@@ -282,7 +282,7 @@ export const Post = (data) => {
               class: "action",
               onclick: replyToPost,
             },
-            i({ class: "fa-solid fa-reply" }),
+            i({ class: "fa-solid fa-reply" })
           ),
           data.author._id === localStorage.getItem("ajs:user")
             ? button(
@@ -305,7 +305,7 @@ export const Post = (data) => {
                     });
                   },
                 },
-                i({ class: "fa-solid fa-trash" }),
+                i({ class: "fa-solid fa-trash" })
               )
             : undefined,
           data.author._id === localStorage.getItem("ajs:user")
@@ -316,18 +316,18 @@ export const Post = (data) => {
                     await editPost(e);
                   },
                 },
-                i({ class: "fa-solid fa-pencil" }),
+                i({ class: "fa-solid fa-pencil" })
               )
-            : undefined,
-        ),
+            : undefined
+        )
       ),
       replyBox,
       span({
         class: "markdown-body",
         innerHTML: md(data.p),
       }),
-      attachments,
-    ),
+      attachments
+    )
   );
 
   let touchstartX,
@@ -482,7 +482,7 @@ export const Posts = async (connection) => {
             class: "regular-button load-more",
             style: "pointer-events: none",
           },
-          i({ class: "fa-solid fa-ellipsis" }),
+          i({ class: "fa-solid fa-ellipsis" })
         )
       : button(
           {
@@ -493,7 +493,7 @@ export const Posts = async (connection) => {
               e.target.disabled = false;
             },
           },
-          "Load more",
-        ),
+          "Load more"
+        )
   );
 };

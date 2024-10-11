@@ -18,8 +18,8 @@ export const uploadFile = async (file) => {
   if (file.size > 25 << 20) {
     alert(
       `This attachment is too big. Please find a way to make it under ${formatBytes(
-        25 << 20,
-      )}`,
+        25 << 20
+      )}`
     );
     return;
   }
@@ -47,7 +47,7 @@ export const updateFileList = (fileList) => {
         span(
           `Uploading ${refs.fileNames.length} file${
             refs.fileNames.length > 1 ? "s" : ""
-          }: `,
+          }: `
         ),
         span(
           ...refs.fileNames.map((id, idx) =>
@@ -58,7 +58,7 @@ export const updateFileList = (fileList) => {
                   href: `https://uploads.meower.org/attachments/${refs.attachments[idx]}/${refs.fileNames[idx]}`,
                   target: "blank",
                 },
-                id,
+                id
               ),
               button(
                 {
@@ -66,21 +66,21 @@ export const updateFileList = (fileList) => {
                   onclick: (e) => {
                     e.stopPropagation();
                     refs.attachments = refs.attachments.filter(
-                      (_, _i) => _i !== idx,
+                      (_, _i) => _i !== idx
                     );
                     refs.fileNames = refs.fileNames.filter(
-                      (_, _i) => _i !== idx,
+                      (_, _i) => _i !== idx
                     );
                     document.querySelector(`[id="remove-${id}"]`).remove();
                     updateFileList(fileList);
                   },
                 },
-                i({ class: "fa-solid fa-x" }),
-              ),
-            ),
-          ),
-        ),
-      ),
+                i({ class: "fa-solid fa-x" })
+              )
+            )
+          )
+        )
+      )
     );
   }
 };
@@ -90,11 +90,7 @@ export const updateFileList = (fileList) => {
  * @param {HTMLInputElement} fileInput
  * @param {HTMLElement} fileList
  */
-export const PostBox = (
-  lurking,
-  fileInput,
-  fileList,
-) => {
+export const PostBox = (lurking, fileInput, fileList) => {
   let lastTyped = 0;
 
   const post = textarea({
@@ -102,11 +98,11 @@ export const PostBox = (
     placeholder: "Whar's on your mind?",
     oninput: () => {
       post.style.height = "";
-      post.style.height = post.scrollHeight + "px";
+      post.style.height = Math.max(40, post.scrollHeight) + "px";
       upload.style.height = "";
-      upload.style.height = post.scrollHeight + "px";
+      upload.style.height = Math.max(40, post.scrollHeight) + "px";
       send.style.height = "";
-      send.style.height = post.scrollHeight + "px";
+      send.style.height = Math.max(40, post.scrollHeight) + "px";
     },
     style: "font-size: 13px",
     onkeydown: async (e) => {
@@ -146,7 +142,7 @@ export const PostBox = (
       },
     },
     fileInput,
-    i({ class: "fa-solid fa-file-arrow-up" }),
+    i({ class: "fa-solid fa-file-arrow-up" })
   );
 
   const send = button(
@@ -182,7 +178,7 @@ export const PostBox = (
         post.style.height = "";
       },
     },
-    i({ class: "fa-solid fa-paper-plane" }),
+    i({ class: "fa-solid fa-paper-plane" })
   );
 
   return span({ class: "post-box-wrapper" }, upload, post, send);

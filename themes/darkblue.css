@@ -67,6 +67,7 @@ html[data-theme="darkblue"] {
     [class=post-box] {
         border-top: 2px solid var(--secondary-dark-blue);
         border-bottom: 2px solid var(--secondary-dark-blue);
+        height: 40px;
     }
 
     [class="post-box edit-box"] {
