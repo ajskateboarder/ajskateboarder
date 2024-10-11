@@ -363,4 +363,8 @@ html[data-compact="true"] {
     .button-row {
         gap: 5px;
     }
+
+    .attachments {
+        margin-top: 10px;
+    }
 }
