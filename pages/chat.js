@@ -1,6 +1,6 @@
 import { van, sidebar, contents, md } from "./index.js";
 import login from "./login.js";
-import skateboardPfp from "./images.js";
+import skateboardPfp from "./skateboard.js";
 
 // prettier-ignore
 const { textarea, ul, li, details, summary, b, div, i, span, button, p, br, img, video, input, small, audio, source, a, dialog, h2, select, option } = van.tags;
