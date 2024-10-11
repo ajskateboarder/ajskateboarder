@@ -45,7 +45,7 @@ export const Post = (data) => {
         return p(
           {
             class: "post reply",
-            style: "display: block; gap: 10px; vertical-align: middle",
+            style: "padding-bottom; 5px; gap: 5px",
           },
           i({
             class: "fa-solid fa-reply",
