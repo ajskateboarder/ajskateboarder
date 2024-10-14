@@ -1,14 +1,13 @@
-html[data-theme="darkish"] {
-    background-color: #202225;
+html[data-theme="dark"] {
+    background-color: #111;
     color: #FBFAF5;
 
     .top-level-stuff {
-        background-color: #202225;
+        background-color: #111;
     }
 
     dialog {
-        background-color: #202225;
-        border: 1px solid #FBFAF5;
+        background-color: #111;
         color: #FBFAF5;
     }
 
@@ -16,12 +15,12 @@ html[data-theme="darkish"] {
     input,
     button,
     textarea {
-        background-color: #292b2f;
-        color: #FBFAF5;
+        background-color: #222;
+        color: #FBFAF5 !important;
     }
 
     input[type=checkbox] {
-        accent-color: #202225;
+        accent-color: #222;
     }
 
     .default-avatar {
@@ -37,10 +36,10 @@ html[data-theme="darkish"] {
     }
 
     .markdown-body a {
-        color: #7289da;
+        color: rgb(160, 170, 255);
     }
 
     .markdown-body a:visited {
-        color: #99aab5;
+        color: rgb(160, 160, 195)
     }
 }

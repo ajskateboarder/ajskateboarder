@@ -5,7 +5,7 @@ import { formatBytes } from "./postbox.js";
 import { settings, refs } from "./refs.js";
 
 // prettier-ignore
-const { div, p, i, a, b, span, video, img, dialog, audio, button, source, textarea, small } = van.tags;
+const { div, p, i, a, b, h2, br, span, video, img, dialog, audio, button, source, textarea, small } = van.tags;
 
 /** @param {number} epochTime */
 const timeAgo = (epochTime) => {
@@ -25,35 +25,59 @@ const timeAgo = (epochTime) => {
   }
 };
 
+/** @param {string} hex */
+const hexToRgb = (hex) => {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (_, r, g, b) => r + r + g + g + b + b);
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
 export const Post = (data) => {
   let replyBox;
   let attachments;
 
   if (data.reply_to && data.reply_to.filter((e) => e !== null).length !== 0) {
-    /** @param {string} e */
-    const fmtReply = (e) => {
-      let post = e;
-      if (post.length > 50) {
-        post = post.slice(0, 30) + "...";
-      }
-      return post;
-    };
-
     replyBox = div(
-      { class: "reply-header" },
+      { class: "reply-header", style: "display: flex; flex-direction: column" },
       ...data.reply_to.map((e) => {
         return p(
           {
             class: "post reply",
-            style: "padding-bottom; 5px; gap: 5px",
+            style: "height: 40px",
           },
           i({
             class: "fa-solid fa-reply",
             style: "transform: scaleX(-1); padding: 5px",
           }),
           " ",
-          b(`@${e.author._id} `),
-          span(fmtReply(e.p))
+          b(
+            { style: "max-width: 200px; min-width: fit-content" },
+            `@${e.author._id} `
+          ),
+          span(
+            {
+              style: "display: block; height: 20px; overflow: hidden",
+              onclick: () => {
+                const post = document.querySelector(`[id="${e._id}"]`);
+                if (post) {
+                  post.scrollIntoView({ behavior: "smooth" });
+                  post.classList.add("silly-jumpto-animation");
+                  setTimeout(() => {
+                    post.classList.remove("silly-jumpto-animation");
+                  }, 1000);
+                }
+              },
+            },
+            e.p
+          )
         );
       })
     );
@@ -72,20 +96,35 @@ export const Post = (data) => {
         } else if (e.mime.startsWith("image/")) {
           return img({
             src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}?preview`,
+            style: "border-radius: 3px",
             onclick: () => {
               const h = dialog(
-                { class: "image-view" },
+                {
+                  class: "image-view",
+                  style: "background: none; border: none",
+                },
+                span(
+                  {
+                    class: "settings-header",
+                    style:
+                      "margin-top: 10px; min-width: 200px; justify-content: right",
+                  },
+                  button(
+                    {
+                      class: "action x",
+                      onclick: () => {
+                        h.remove();
+                      },
+                    },
+                    i({ class: "fa-solid fa-x" })
+                  )
+                ),
+                br(),
                 img({
-                  style: "max-height: 100vw",
+                  style: "max-height: 50vw",
                   src: `https://uploads.meower.org/attachments/${e.id}/${e.filename}`,
                 })
               );
-              const ev = (e) => {
-                if (e.target.closest(".image-view")) {
-                  h.close();
-                }
-              };
-              window.onclick = ev;
               document.body.append(h);
               h.showModal();
             },
@@ -136,6 +175,73 @@ export const Post = (data) => {
       avatar.src = skateboard;
       avatar.classList.add("default-avatar");
     },
+    onclick: async () => {
+      const profile = await (
+        await fetch(`https://api.meower.org/users/${data.author._id}`)
+      ).json();
+      const quote = p();
+      quote.innerHTML = md(profile.quote);
+      const info = span(quote);
+
+      const color = `#${profile.avatar_color}`;
+      const rgb = hexToRgb(color);
+      const color1 = rgb
+        ? `rgb(${Math.max(0, rgb.r - 150)}, ${Math.max(
+            0,
+            rgb.g - 150
+          )}, ${Math.max(0, rgb.b - 150)})`
+        : "black";
+      const color2 = rgb
+        ? `rgb(${Math.max(0, rgb.r - 200)}, ${Math.max(
+            0,
+            rgb.g - 200
+          )}, ${Math.max(0, rgb.b - 200)})`
+        : "black";
+
+      const h = dialog(
+        {
+          class: "profile-view",
+          style: `min-width: 25%; color: white; background: linear-gradient(to bottom right, ${color1}, ${color2}); border: 2px solid ${color}; border-radius: 10px`,
+        },
+        span(
+          {
+            class: "settings-header",
+            style: "margin-top: 10px; min-width: 200px",
+          },
+          img({
+            height: "64",
+            class: `avatar ${data.author._id}`,
+            width: "64",
+            style: `border: 3px solid #${profile.avatar_color}`,
+            src: `https://uploads.meower.org/icons/${data.author.avatar}`,
+            onerror: (e) => {
+              e.target.src = skateboard;
+              e.target.classList.add("default-avatar");
+              e.target.style.border = "none";
+            },
+          }),
+          button(
+            {
+              class: "action x",
+              style: "color: white",
+              onclick: () => {
+                h.remove();
+              },
+            },
+            i({ class: "fa-solid fa-x" })
+          )
+        ),
+        h2(data.author._id),
+        info
+      );
+      window.onclick = (e) => {
+        if (!e.target.closest(".profile-view")) {
+          h.close();
+        }
+      };
+      document.body.append(h);
+      h.showModal();
+    },
   });
 
   const replyToPost = () => {
@@ -147,7 +253,7 @@ export const Post = (data) => {
           class: "post reply-thing",
           id: `reply-${data._id}`,
           style:
-            "padding-bottom: 10px; margin-bottom: 0px; display: flex; justify-content: space-between",
+            "margin-bottom: 0px; display: flex; justify-content: space-between",
         },
         span(
           b(`@${data.author._id}`),
@@ -156,7 +262,7 @@ export const Post = (data) => {
         ),
         button(
           {
-            class: "action",
+            class: "action x",
             onclick: (e) => {
               const index = refs.replies.findIndex((e) => e === data._id);
               refs.replies = refs.replies

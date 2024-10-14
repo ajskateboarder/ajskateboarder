@@ -21,7 +21,7 @@ const Signout = (connection) => {
       },
     },
     i({ class: "fa-solid fa-sign-out" }),
-    " Sign out",
+    " Sign out"
   );
 };
 
@@ -40,9 +40,9 @@ const Navbar = (connection) => {
             document.querySelector(".settings").showModal();
           },
         },
-        i({ class: "fa-solid fa-cog" }),
-      ),
-    ),
+        i({ class: "fa-solid fa-cog" })
+      )
+    )
   );
 };
 
@@ -58,9 +58,11 @@ const Settings = () => {
     option({ value: "light" }, "ah its blinding my eyes"),
     option({ value: "dark" }, "normal people theme"),
     option({ value: "darkish" }, "normal people but discord-y"),
-    option({ value: "darkblue" }, "dark blue from svelte"),
+    option({ value: "darkblue" }, "dark blue from svelte")
   );
-  themes.querySelector(`[value=${settings.theme}]`).setAttribute("selected", "selected");
+  themes
+    .querySelector(`[value=${settings.theme}]`)
+    .setAttribute("selected", "selected");
 
   return dialog(
     { class: "settings" },
@@ -74,8 +76,8 @@ const Settings = () => {
             document.querySelector(".settings").close();
           },
         },
-        i({ class: "fa-solid fa-x" }),
-      ),
+        i({ class: "fa-solid fa-x" })
+      )
     ),
     p(b("Theme "), themes),
     p(
@@ -88,7 +90,7 @@ const Settings = () => {
           settings.sortUlist = e.target.checked;
           if (settings.sortUlist === true) {
             const users = [...document.querySelectorAll(".user-list > li")].map(
-              (e) => e.innerHTML.replace(", ", ""),
+              (e) => e.innerHTML.replace(", ", "")
             );
             users.sort((a, b) => a.localeCompare(b));
             const userList = document.querySelector(".user-list");
@@ -98,7 +100,7 @@ const Settings = () => {
             }
           }
         },
-      }),
+      })
     ),
     p(
       b("Aaaa make post time update every second"),
@@ -109,7 +111,7 @@ const Settings = () => {
           localStorage.setItem("ajs:date-update", e.target.checked);
           settings.everySecond = e.target.checked;
         },
-      }),
+      })
     ),
     p(
       b("Hydraulic press"),
@@ -121,7 +123,7 @@ const Settings = () => {
           settings.compact = e.target.checked;
           document.documentElement.dataset.compact = `${settings.compact}`;
         },
-      }),
+      })
     ),
     p(
       b("Infinite scrolling"),
@@ -132,9 +134,9 @@ const Settings = () => {
           localStorage.setItem("ajs:infinite-scroll", e.target.checked);
           settings.infiniteScroll = e.target.checked;
         },
-      }),
+      })
     ),
-    p("You may need to reload for some of these settings to fully apply."),
+    p("You may need to reload for some of these settings to fully apply.")
   );
 };
 
@@ -180,7 +182,7 @@ export default async function () {
             username: localStorage.getItem("ajs:user"),
             pswd: localStorage.getItem("ajs:token"),
           },
-        }),
+        })
       );
     }
 
@@ -204,19 +206,15 @@ export default async function () {
         Navbar(ws),
         UserList(ws),
         replyList,
-        PostBox(
-          lurking,
-          uploadFiles,
-          fileList,
-        ),
-        fileList,
+        PostBox(lurking, uploadFiles, fileList),
+        fileList
       ),
       br(),
-      await Posts(ws),
+      await Posts(ws)
     );
-    
+
     contents.append(Settings());
-    
+
     document.querySelector(".loading").remove();
   };
 }

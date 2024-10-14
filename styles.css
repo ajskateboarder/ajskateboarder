@@ -1,3 +1,7 @@
+@import url(./dark.css);
+@import url(./darkish.css);
+@import url(./darkblue.css);
+
 html {
     box-sizing: border-box;
     font-family: Inter;
@@ -147,7 +151,8 @@ body.chat main {
 .avatar {
     border-radius: 50%;
     aspect-ratio: 1;
-    image-rendering: optimizeQuality;
+    cursor: pointer;
+    object-fit: cover;
 }
 
 .post-box-wrapper {
@@ -209,11 +214,15 @@ img.preview,
     text-decoration: none;
 }
 
-.markdown-body blockquote {
+blockquote {
     opacity: 0.5;
     margin-left: 0px;
     padding-left: 20px;
     border-left: 3px solid grey;
+}
+
+blockquote>blockquote {
+    opacity: 1;
 }
 
 video.preview,
@@ -293,8 +302,15 @@ audio.preview {
 
 .silly-editing-gesture {
     animation-duration: 0.3s;
-    animation-name: slide_left;
+    animation-name: slide_right;
     animation-iteration-count: 1;
+}
+
+.silly-jumpto-animation {
+    animation-duration: 0.3s;
+    animation-name: jumpto;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-out;
 }
 
 @keyframes slide_left {
@@ -317,10 +333,53 @@ audio.preview {
     }
 }
 
+@keyframes jumpto {
+    from {
+        background-color: rgba(100, 100, 100, 0.1);
+    }
+
+    to {
+        background-color: revert;
+    }
+}
+
+dialog {
+    border: 2px solid;
+    border-radius: 10px;
+}
+
+.x {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+dialog[open] {
+    animation: show 0.3s cubic-bezier(0.075, 0.82, 0.165, 1) normal;
+}
+
+@keyframes show {
+    from {
+        transform: scale(0.9);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
 .markdown-body {
     max-height: 250px;
     overflow-y: auto;
     margin-top: -15px;
+}
+
+.reply-header .reply {
+    margin-bottom: -8px;
+}
+
+.reply-header .reply:last-child {
+    margin-bottom: 10px;
 }
 
 html[data-compact="true"] {
@@ -367,5 +426,14 @@ html[data-compact="true"] {
 
     .attachments {
         margin-top: 10px;
+    }
+
+    .reply {
+        height: 0px;
+        display: inline-flex
+    }
+
+    .reply-header .reply:last-child {
+        margin-bottom: -20px;
     }
 }
