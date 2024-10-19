@@ -21,4 +21,5 @@ export const settings = {
   compact: (localStorage.getItem("ajs:compact") ?? "false") === "true",
   infiniteScroll:
     (localStorage.getItem("ajs:infinite-scroll") ?? "true") === "true",
+  fullWidth: (localStorage.getItem("ajs:full-width") ?? "true") === "true"
 };

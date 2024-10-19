@@ -31,5 +31,6 @@ const sidebar = document.querySelector("aside");
 
 /** @type {HTMLElement} */
 const contents = document.querySelector("main");
+console.log(sidebar, contents)
 
 export { van, sidebar, contents };

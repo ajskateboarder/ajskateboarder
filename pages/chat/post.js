@@ -201,7 +201,7 @@ export const Post = (data) => {
       const h = dialog(
         {
           class: "profile-view",
-          style: `min-width: 25%; color: white; background: linear-gradient(to bottom right, ${color1}, ${color2}); border: 2px solid ${color}; border-radius: 10px`,
+          style: `min-width: 25%; max-width: 50%; color: white; background: linear-gradient(to bottom right, ${color1}, ${color2}); border: 2px solid ${color}; border-radius: 10px`,
         },
         span(
           {

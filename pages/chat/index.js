@@ -1,6 +1,6 @@
-import { van, sidebar, contents, md } from "/pages/index.js";
-import login from "/pages/login.js";
-import { Posts } from "/pages/chat/post.js";
+import { van, sidebar, contents, md } from "../index.js";
+import login from "../login.js";
+import { Posts } from "./post.js";
 
 import { formatBytes, PostBox, updateFileList, uploadFile } from "./postbox.js";
 import { refs, settings } from "./refs.js";
@@ -133,6 +133,18 @@ const Settings = () => {
         onchange: (e) => {
           localStorage.setItem("ajs:infinite-scroll", e.target.checked);
           settings.infiniteScroll = e.target.checked;
+        },
+      })
+    ),
+    p(
+      b("Always use full width (what kinda person are ye)"),
+      input({
+        type: "checkbox",
+        checked: settings.fullWidth,
+        onchange: (e) => {
+          localStorage.setItem("ajs:full-width", e.target.checked);
+          settings.fullWidth = e.target.checked;
+          document.documentElement.dataset.fullwidth = `${settings.fullWidth}`;
         },
       })
     ),
